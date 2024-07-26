@@ -12,7 +12,18 @@ License URI: mit
 .post_section {
   border: 1px solid #ddd;
   padding: 20px;
-  margin: 20px 0;
+  margin: 20px 5px;
+}
+@media screen and (min-width: 767px) {
+  .post_section {
+    width: 420px;
+    float: left;
+  }
+}
+@media screen and (max-width: 767px) {
+  .post_section {
+    width: 100%;
+  }
 }
 .post_section .post_header h2 {
   font-size: 24px;
@@ -41,6 +52,9 @@ License URI: mit
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
+  position: fixed;
+  right: 10px;
+  bottom: 80px;
 }
 
 #addImageButton {
@@ -49,4 +63,7 @@ License URI: mit
   padding: 10px 20px;
   font-size: 16px;
   cursor: pointer;
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
 }/*# sourceMappingURL=style.css.map */
