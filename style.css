@@ -11,18 +11,19 @@ License URI: mit
 */
 .post_section {
   border: 1px solid #ddd;
-  padding: 20px;
-  margin: 20px 5px;
 }
 @media screen and (min-width: 767px) {
   .post_section {
     width: 420px;
     float: left;
+    margin: 20px 5px;
+    padding: 20px;
   }
 }
 @media screen and (max-width: 767px) {
   .post_section {
     width: 100%;
+    margin-top: 20px;
   }
 }
 .post_section .post_header h2 {
