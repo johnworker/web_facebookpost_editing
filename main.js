@@ -15,19 +15,20 @@ window.addEventListener('load', function () {
     });
 
     // 處理圖片替換和刪除
-    document.querySelectorAll('.post_images').forEach(function (img) {
+    document.querySelectorAll('.img_one','.img_two','.img_three','.img_four','.img_five').forEach(function (img) {
         img.addEventListener('click', function () {
-            const action = prompt('輸入 "更換" 來替換圖片，輸入 "刪除" 來刪除圖片:');
-            if (action === '更換') {
-                document.getElementById('imageUpload').click();
-                document.getElementById('imageUpload').onchange = function (event) {
+            const action = prompt('輸入 "換" 來替換圖片，輸入 "刪" 來刪除圖片:');
+            if (action === '換') {
+                const imageUpload = document.getElementById('imageUpload');
+                imageUpload.click();
+                imageUpload.onchange = function (event) {
                     const reader = new FileReader();
                     reader.onload = function () {
                         img.src = reader.result;
                     };
                     reader.readAsDataURL(event.target.files[0]);
                 };
-            } else if (action === '刪除') {
+            } else if (action === '刪') {
                 img.remove();
             }
         });
