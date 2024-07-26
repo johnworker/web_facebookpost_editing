@@ -15,7 +15,7 @@ window.addEventListener('load', function () {
     });
 
     // 處理圖片替換和刪除
-    document.querySelectorAll('.img_one','.img_two','.img_three','.img_four','.img_five').forEach(function (img) {
+    document.querySelectorAll('.post_images').forEach(function (img) {
         img.addEventListener('click', function () {
             const action = prompt('輸入 "換" 來替換圖片，輸入 "刪" 來刪除圖片:');
             if (action === '換') {
