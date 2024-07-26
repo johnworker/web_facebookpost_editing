@@ -42,11 +42,20 @@ $mobile: 767px; //手機尺寸
             width: 18%;
             height: auto;
             border: 1px solid #ddd;
+            object-fit: cover;
         }
     }
 }
 
 #saveButton {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#addImageButton {
     display: block;
     margin: 20px auto;
     padding: 10px 20px;
