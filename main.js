@@ -1,5 +1,3 @@
-
-// 更改文章和圖片
 window.addEventListener('load', function () {
     // 加載已保存的內容
     if (localStorage.getItem('post_header')) {
@@ -19,7 +17,8 @@ window.addEventListener('load', function () {
     // 處理圖片替換和刪除
     document.querySelectorAll('.post_images').forEach(function (img) {
         img.addEventListener('click', function () {
-            if (confirm('是否要替換這張圖片？')) {
+            const action = prompt('輸入 "更換" 來替換圖片，輸入 "刪除" 來刪除圖片:');
+            if (action === '更換') {
                 document.getElementById('imageUpload').click();
                 document.getElementById('imageUpload').onchange = function (event) {
                     const reader = new FileReader();
@@ -28,7 +27,7 @@ window.addEventListener('load', function () {
                     };
                     reader.readAsDataURL(event.target.files[0]);
                 };
-            } else if (confirm('是否要刪除這張圖片？')) {
+            } else if (action === '刪除') {
                 img.remove();
             }
         });
