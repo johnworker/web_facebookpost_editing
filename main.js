@@ -1,4 +1,4 @@
-window.addEventListener('load', function () {
+wwindow.addEventListener('load', function () {
     var editor;
     editor = ContentTools.EditorApp.get();
     editor.init('*[data-editable]', 'data-name');
