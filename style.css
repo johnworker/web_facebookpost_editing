@@ -35,12 +35,15 @@ License URI: mit
   color: #666;
 }
 .post_section .post_images {
-  display: flex;
-  justify-content: space-between;
+  display: grid;
   margin-top: 20px;
 }
+.post_section .post_images .row {
+  display: flex;
+  justify-content: space-between;
+}
 .post_section .post_images img {
-  width: 18%;
+  width: 200px;
   height: auto;
   border: 1px solid #ddd;
   -o-object-fit: cover;

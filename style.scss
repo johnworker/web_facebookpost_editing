@@ -44,12 +44,16 @@ $mobile: 767px; //手機尺寸
     }
 
     .post_images {
-        display: flex;
-        justify-content: space-between;
+        display: grid;
         margin-top: 20px;
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+        }
         
         img {
-            width: 18%;
+            width: 200px;
             height: auto;
             border: 1px solid #ddd;
             object-fit: cover;

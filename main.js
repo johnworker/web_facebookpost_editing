@@ -51,7 +51,7 @@ window.addEventListener('load', function () {
                 const newImg = document.createElement('img');
                 newImg.src = reader.result;
                 newImg.contentEditable = true;
-                document.querySelector('.post_images').appendChild(newImg);
+                document.querySelector('.post_images .row:last-child').appendChild(newImg);
 
                 // 添加事件監聽器到新增的圖片
                 newImg.addEventListener('click', function () {
