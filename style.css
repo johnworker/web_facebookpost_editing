@@ -49,6 +49,11 @@ License URI: mit
   -o-object-fit: cover;
      object-fit: cover;
 }
+@media screen and (max-width: 767px) {
+  .post_section .post_images img {
+    width: 180px;
+  }
+}
 
 #saveButton {
   display: block;

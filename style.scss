@@ -57,6 +57,11 @@ $mobile: 767px; //手機尺寸
             height: auto;
             border: 1px solid #ddd;
             object-fit: cover;
+
+            @media screen and (max-width: $mobile) {
+                width: 180px;
+            }
+        
         }
     }
 }
