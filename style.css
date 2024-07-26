@@ -63,10 +63,21 @@ License URI: mit
   cursor: pointer;
   position: fixed;
   right: 10px;
-  bottom: 80px;
+  bottom: 140px;
 }
 
 #addImageButton {
+  display: block;
+  margin: 20px auto;
+  padding: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  position: fixed;
+  right: 10px;
+  bottom: 70px;
+}
+
+#sectionSelector {
   display: block;
   margin: 20px auto;
   padding: 10px;

@@ -51,7 +51,20 @@ window.addEventListener('load', function () {
                 const newImg = document.createElement('img');
                 newImg.src = reader.result;
                 newImg.contentEditable = true;
-                document.querySelector('.post_images .row:last-child').appendChild(newImg);
+
+                // 獲取選擇的 section
+                const sectionId = document.getElementById('sectionSelector').value;
+                const targetSection = document.querySelector(`#${sectionId} .post_images .row:last-child`);
+
+                if (targetSection) {
+                    targetSection.appendChild(newImg);
+                } else {
+                    // 如果最後一個 row 不存在，創建一個新的 row
+                    const newRow = document.createElement('div');
+                    newRow.classList.add('row');
+                    newRow.appendChild(newImg);
+                    document.querySelector(`#${sectionId} .post_images`).appendChild(newRow);
+                }
 
                 // 添加事件監聽器到新增的圖片
                 newImg.addEventListener('click', function () {
