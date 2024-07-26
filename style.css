@@ -49,7 +49,7 @@ License URI: mit
 #saveButton {
   display: block;
   margin: 20px auto;
-  padding: 10px 20px;
+  padding: 10px;
   font-size: 16px;
   cursor: pointer;
   position: fixed;
@@ -60,7 +60,7 @@ License URI: mit
 #addImageButton {
   display: block;
   margin: 20px auto;
-  padding: 10px 20px;
+  padding: 10px;
   font-size: 16px;
   cursor: pointer;
   position: fixed;
