@@ -36,11 +36,13 @@ License URI: mit
 }
 .post_section .post_images {
   display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   margin-top: 20px;
+  gap: 10px;
 }
 .post_section .post_images .row {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
 }
 .post_section .post_images img {
   width: 200px;
