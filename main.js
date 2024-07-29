@@ -9,21 +9,56 @@ window.addEventListener('load', function () {
 
     // 保存變更
     document.getElementById('saveButton').addEventListener('click', function () {
-        localStorage.setItem('post_header', document.querySelector('.post_header').innerHTML);
-        localStorage.setItem('post_images', document.querySelector('.post_images').innerHTML);
-        alert('變更已保存！');
+        saveRemoteContent();
     });
 
     // 讀取儲存內容
     document.getElementById('loadButton').addEventListener('click', function () {
-        if (localStorage.getItem('post_header')) {
-            document.querySelector('.post_header').innerHTML = localStorage.getItem('post_header');
-        }
-        if (localStorage.getItem('post_images')) {
-            document.querySelector('.post_images').innerHTML = localStorage.getItem('post_images');
-        }
-        alert('已加載上次儲存的內容！');
+        loadRemoteContent();
     });
+
+    // 保存到遠端伺服器
+    function saveRemoteContent() {
+        const data = {
+            post_header: document.querySelector('.post_header').innerHTML,
+            post_images: document.querySelector('.post_images').innerHTML
+        };
+
+        fetch('https://johnworker.github.io/web_facebookpost_editing/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('變更已保存！');
+        })
+        .catch((error) => {
+            console.error('Error saving content:', error);
+            alert('保存內容時發生錯誤。');
+        });
+    }
+
+    // 從遠端讀取內容
+    function loadRemoteContent() {
+        fetch('https://johnworker.github.io/web_facebookpost_editing/')
+            .then(response => response.json())
+            .then(data => {
+                if (data.post_header) {
+                    document.querySelector('.post_header').innerHTML = data.post_header;
+                }
+                if (data.post_images) {
+                    document.querySelector('.post_images').innerHTML = data.post_images;
+                }
+                alert('已加載上次儲存的內容！');
+            })
+            .catch(error => {
+                console.error('Error loading remote content:', error);
+                alert('讀取內容時發生錯誤。');
+            });
+    }
 
     // 處理圖片替換和刪除
     function setupImageActions(img) {
