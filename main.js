@@ -1,20 +1,10 @@
 window.addEventListener('load', function () {
-    // 加載已保存的內容
-    if (localStorage.getItem('post_header')) {
-        document.querySelector('.post_header').innerHTML = localStorage.getItem('post_header');
-    }
-    if (localStorage.getItem('post_images')) {
-        document.querySelector('.post_images').innerHTML = localStorage.getItem('post_images');
-    }
+    // 自動加載已保存的內容
+    loadRemoteContent();
 
     // 保存變更
     document.getElementById('saveButton').addEventListener('click', function () {
         saveRemoteContent();
-    });
-
-    // 讀取儲存內容
-    document.getElementById('loadButton').addEventListener('click', function () {
-        loadRemoteContent();
     });
 
     // 保存到遠端伺服器
