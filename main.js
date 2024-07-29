@@ -31,19 +31,19 @@ window.addEventListener('load', function () {
             },
             body: JSON.stringify(data)
         })
-        .then(response => response.json())
-        .then(data => {
-            alert('變更已保存！');
-        })
-        .catch((error) => {
-            console.error('Error saving content:', error);
-            alert('保存內容時發生錯誤。');
-        });
+            .then(response => response.json())
+            .then(data => {
+                alert('變更已保存！');
+            })
+            .catch((error) => {
+                console.error('Error saving content:', error);
+                alert('保存內容時發生錯誤。');
+            });
     }
 
     // 從遠端讀取內容
     function loadRemoteContent() {
-        fetch('https://johnworker.github.io/web_facebookpost_editing/load')
+        fetch('https://johnworker.github.io/web_facebookpost_editing/')
             .then(response => response.json())
             .then(data => {
                 if (data.post_sections) {
