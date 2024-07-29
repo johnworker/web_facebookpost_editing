@@ -16,7 +16,7 @@ window.addEventListener('load', function () {
 
     // 處理圖片替換和刪除
     function setupImageActions(img) {
-        img.addEventListener('dblclick', function () {
+        img.addEventListener('dblclick', function () { // 使用 dblclick 事件
             const action = prompt('輸入 "換" 來替換圖片，輸入 "刪" 來刪除圖片，輸入 "調" 來調整圖片屬性:');
             if (action === '換') {
                 const imageUpload = document.getElementById('imageUpload');
@@ -55,8 +55,8 @@ window.addEventListener('load', function () {
                     const newImg = document.createElement('img');
                     newImg.src = reader.result;
                     newImg.contentEditable = true;
-                    newImg.style.width = '200px'; // 固定寬度
-                    newImg.style.height = '200px'; // 固定高度
+                    newImg.style.width = '150px'; // 固定寬度
+                    newImg.style.height = '150px'; // 固定高度
 
                     // 獲取選擇的 section
                     const sectionId = document.getElementById('sectionSelector').value;
@@ -73,14 +73,15 @@ window.addEventListener('load', function () {
                     }
 
                     setupImageActions(newImg);
+                    setupDragAndDrop(newImg); // 為新增圖片設置拖放功能
                 };
                 reader.readAsDataURL(files[i]);
             }
         };
     });
 
-    // 調整圖片順序功能
-    document.querySelectorAll('.post_images img').forEach(function (img) {
+    // 設置拖放功能
+    function setupDragAndDrop(img) {
         img.setAttribute('draggable', true);
 
         img.addEventListener('dragstart', function (event) {
@@ -106,5 +107,33 @@ window.addEventListener('load', function () {
         img.addEventListener('dragend', function () {
             img.classList.remove('dragging');
         });
-    });
+
+        // 以下是針對移動設備的事件處理程序
+        img.addEventListener('touchstart', function (event) {
+            event.preventDefault();
+            img.classList.add('dragging');
+        });
+
+        img.addEventListener('touchmove', function (event) {
+            event.preventDefault();
+            const touch = event.touches[0];
+            const dragging = document.querySelector('.dragging');
+            const overElement = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (dragging && overElement && overElement.tagName === 'IMG' && dragging !== overElement) {
+                // 交換圖片位置
+                const draggingSrc = dragging.src;
+                dragging.src = overElement.src;
+                overElement.src = draggingSrc;
+            }
+        });
+
+        img.addEventListener('touchend', function () {
+            const dragging = document.querySelector('.dragging');
+            if (dragging) {
+                dragging.classList.remove('dragging');
+            }
+        });
+    }
+
+    document.querySelectorAll('.post_images img').forEach(setupDragAndDrop);
 });
