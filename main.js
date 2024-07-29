@@ -1,82 +1,37 @@
 window.addEventListener('load', function () {
-    // 自動加載已保存的內容
-    loadRemoteContent();
+    // 加載已保存的內容
+    function loadSavedContent() {
+        if (localStorage.getItem('post_header')) {
+            document.querySelectorAll('.post_header').forEach((header, index) => {
+                header.innerHTML = localStorage.getItem(`post_header_${index}`);
+            });
+        }
+        if (localStorage.getItem('post_images')) {
+            document.querySelectorAll('.post_images').forEach((images, index) => {
+                images.innerHTML = localStorage.getItem(`post_images_${index}`);
+            });
+        }
+    }
+
+    loadSavedContent();
 
     // 保存變更
     document.getElementById('saveButton').addEventListener('click', function () {
-        saveRemoteContent();
+        document.querySelectorAll('.post_header').forEach((header, index) => {
+            localStorage.setItem(`post_header_${index}`, header.innerHTML);
+        });
+        document.querySelectorAll('.post_images').forEach((images, index) => {
+            localStorage.setItem(`post_images_${index}`, images.innerHTML);
+        });
+        alert('變更已保存！');
     });
 
-    // 保存到遠端伺服器
-    function saveRemoteContent() {
-        const data = {
-            post_sections: []
-        };
-
-        document.querySelectorAll('.post_section').forEach(section => {
-            const sectionData = {
-                header: section.querySelector('.post_header').innerHTML,
-                images: []
-            };
-            section.querySelectorAll('.post_images img').forEach(img => {
-                sectionData.images.push(img.src);
-            });
-            data.post_sections.push(sectionData);
-        });
-
-        fetch('https://johnworker.github.io/web_facebookpost_editing/save', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(data)
-        })
-            .then(response => response.json())
-            .then(data => {
-                alert('變更已保存！');
-            })
-            .catch((error) => {
-                console.error('Error saving content:', error);
-                alert('保存內容時發生錯誤。');
-            });
-    }
-
-    // 從遠端讀取內容
-    function loadRemoteContent() {
-        fetch('https://johnworker.github.io/web_facebookpost_editing/load')
-            .then(response => response.json())
-            .then(data => {
-                if (data.post_sections) {
-                    data.post_sections.forEach((sectionData, index) => {
-                        const section = document.querySelector(`#section${index + 1}`);
-                        if (section) {
-                            section.querySelector('.post_header').innerHTML = sectionData.header;
-                            const imagesContainer = section.querySelector('.post_images');
-                            imagesContainer.innerHTML = ''; // 清空現有圖片
-                            sectionData.images.forEach(src => {
-                                const img = document.createElement('img');
-                                img.src = src;
-                                img.setAttribute('contenteditable', 'true');
-                                imagesContainer.appendChild(img);
-                                setupImageActions(img);
-                                setupDragAndDrop(img);
-                            });
-                        }
-                    });
-                }
-                alert('已加載上次儲存的內容！');
-            })
-            .catch(error => {
-                console.error('Error loading remote content:', error);
-                alert('讀取內容時發生錯誤。');
-            });
-    }
 
     // 處理圖片替換和刪除
     function setupImageActions(img) {
         let lastTouchTime = 0;
 
-        img.addEventListener('dblclick', function () {
+        img.addEventListener('dblclick', function () { // 使用 dblclick 事件
             handleImageAction(img);
         });
 
@@ -84,6 +39,7 @@ window.addEventListener('load', function () {
             const currentTime = new Date().getTime();
             const timeDifference = currentTime - lastTouchTime;
             if (timeDifference < 300 && timeDifference > 0) {
+                // 觸碰兩次
                 handleImageAction(img);
             }
             lastTouchTime = currentTime;
@@ -116,6 +72,7 @@ window.addEventListener('load', function () {
 
     document.querySelectorAll('.post_images img').forEach(setupImageActions);
 
+    // 新增圖片功能
     document.getElementById('addImageButton').addEventListener('click', function () {
         const imageUpload = document.getElementById('imageUpload');
         imageUpload.click();
@@ -127,15 +84,17 @@ window.addEventListener('load', function () {
                     const newImg = document.createElement('img');
                     newImg.src = reader.result;
                     newImg.contentEditable = true;
-                    newImg.style.width = '200px';
-                    newImg.style.height = '200px';
+                    newImg.style.width = '200px'; // 固定寬度
+                    newImg.style.height = '200px'; // 固定高度
 
+                    // 獲取選擇的 section
                     const sectionId = document.getElementById('sectionSelector').value;
                     const targetSection = document.querySelector(`#${sectionId} .post_images .row:last-child`);
 
                     if (targetSection) {
                         targetSection.appendChild(newImg);
                     } else {
+                        // 如果最後一個 row 不存在，創建一個新的 row
                         const newRow = document.createElement('div');
                         newRow.classList.add('row');
                         newRow.appendChild(newImg);
@@ -143,13 +102,14 @@ window.addEventListener('load', function () {
                     }
 
                     setupImageActions(newImg);
-                    setupDragAndDrop(newImg);
+                    setupDragAndDrop(newImg); // 為新增圖片設置拖放功能
                 };
                 reader.readAsDataURL(files[i]);
             }
         };
     });
 
+    // 設置拖放功能
     function setupDragAndDrop(img) {
         img.setAttribute('draggable', true);
 
@@ -166,6 +126,7 @@ window.addEventListener('load', function () {
             event.preventDefault();
             const dragging = document.querySelector('.dragging');
             if (dragging && dragging !== img) {
+                // 交換圖片位置
                 const draggingSrc = dragging.src;
                 dragging.src = img.src;
                 img.src = draggingSrc;
@@ -176,6 +137,7 @@ window.addEventListener('load', function () {
             img.classList.remove('dragging');
         });
 
+        // 以下是針對移動設備的事件處理程序
         img.addEventListener('touchstart', function (event) {
             event.preventDefault();
             img.classList.add('dragging');
@@ -187,6 +149,7 @@ window.addEventListener('load', function () {
             const dragging = document.querySelector('.dragging');
             const overElement = document.elementFromPoint(touch.clientX, touch.clientY);
             if (dragging && overElement && overElement.tagName === 'IMG' && dragging !== overElement) {
+                // 交換圖片位置
                 const draggingSrc = dragging.src;
                 dragging.src = overElement.src;
                 overElement.src = draggingSrc;
