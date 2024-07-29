@@ -16,29 +16,46 @@ window.addEventListener('load', function () {
 
     // 處理圖片替換和刪除
     function setupImageActions(img) {
-        img.addEventListener('dblclick', function () { // 使用 dblclick 事件
-            const action = prompt('輸入 "換" 來替換圖片，輸入 "刪" 來刪除圖片，輸入 "調" 來調整圖片屬性:');
-            if (action === '換') {
-                const imageUpload = document.getElementById('imageUpload');
-                imageUpload.click();
-                imageUpload.onchange = function (event) {
-                    const reader = new FileReader();
-                    reader.onload = function () {
-                        img.src = reader.result;
-                    };
-                    reader.readAsDataURL(event.target.files[0]);
-                };
-            } else if (action === '刪') {
-                img.remove();
-            } else if (action === '調') {
-                const newWidth = prompt('輸入新的寬度（例如：150px 或 50%）:');
-                const newHeight = prompt('輸入新的高度（例如：150px 或 50%）:');
-                const newPosition = prompt('輸入新的擺放位置（例如：left, right, center）:');
-                if (newWidth) img.style.width = newWidth;
-                if (newHeight) img.style.height = newHeight;
-                if (newPosition) img.style.float = newPosition;
-            }
+        // 桌面設備
+        img.addEventListener('dblclick', function () {
+            handleImageAction(img);
         });
+
+        // 移動設備
+        let lastTap = 0;
+        img.addEventListener('touchend', function (event) {
+            const currentTime = new Date().getTime();
+            const tapLength = currentTime - lastTap;
+            if (tapLength < 500 && tapLength > 0) {
+                handleImageAction(img);
+                event.preventDefault();
+            }
+            lastTap = currentTime;
+        });
+    }
+
+    function handleImageAction(img) {
+        const action = prompt('輸入 "換" 來替換圖片，輸入 "刪" 來刪除圖片，輸入 "調" 來調整圖片屬性:');
+        if (action === '換') {
+            const imageUpload = document.getElementById('imageUpload');
+            imageUpload.click();
+            imageUpload.onchange = function (event) {
+                const reader = new FileReader();
+                reader.onload = function () {
+                    img.src = reader.result;
+                };
+                reader.readAsDataURL(event.target.files[0]);
+            };
+        } else if (action === '刪') {
+            img.remove();
+        } else if (action === '調') {
+            const newWidth = prompt('輸入新的寬度（例如：150px 或 50%）:');
+            const newHeight = prompt('輸入新的高度（例如：150px 或 50%）:');
+            const newPosition = prompt('輸入新的擺放位置（例如：left, right, center）:');
+            if (newWidth) img.style.width = newWidth;
+            if (newHeight) img.style.height = newHeight;
+            if (newPosition) img.style.float = newPosition;
+        }
     }
 
     document.querySelectorAll('.post_images img').forEach(setupImageActions);
