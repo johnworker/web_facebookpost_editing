@@ -16,21 +16,20 @@ window.addEventListener('load', function () {
 
     // 處理圖片替換和刪除
     function setupImageActions(img) {
-        // 桌面設備
-        img.addEventListener('dblclick', function () {
+        let lastTouchTime = 0;
+
+        img.addEventListener('dblclick', function () { // 使用 dblclick 事件
             handleImageAction(img);
         });
 
-        // 移動設備
-        let lastTap = 0;
         img.addEventListener('touchend', function (event) {
             const currentTime = new Date().getTime();
-            const tapLength = currentTime - lastTap;
-            if (tapLength < 500 && tapLength > 0) {
+            const timeDifference = currentTime - lastTouchTime;
+            if (timeDifference < 300 && timeDifference > 0) {
+                // 觸碰兩次
                 handleImageAction(img);
-                event.preventDefault();
             }
-            lastTap = currentTime;
+            lastTouchTime = currentTime;
         });
     }
 
