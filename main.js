@@ -1,31 +1,18 @@
 window.addEventListener('load', function () {
     // 加載已保存的內容
-    function loadSavedContent() {
-        if (localStorage.getItem('post_header')) {
-            document.querySelectorAll('.post_header').forEach((header, index) => {
-                header.innerHTML = localStorage.getItem(`post_header_${index}`);
-            });
-        }
-        if (localStorage.getItem('post_images')) {
-            document.querySelectorAll('.post_images').forEach((images, index) => {
-                images.innerHTML = localStorage.getItem(`post_images_${index}`);
-            });
-        }
+    if (localStorage.getItem('post_header')) {
+        document.querySelector('.post_header').innerHTML = localStorage.getItem('post_header');
     }
-
-    loadSavedContent();
+    if (localStorage.getItem('post_images')) {
+        document.querySelector('.post_images').innerHTML = localStorage.getItem('post_images');
+    }
 
     // 保存變更
     document.getElementById('saveButton').addEventListener('click', function () {
-        document.querySelectorAll('.post_header').forEach((header, index) => {
-            localStorage.setItem(`post_header_${index}`, header.innerHTML);
-        });
-        document.querySelectorAll('.post_images').forEach((images, index) => {
-            localStorage.setItem(`post_images_${index}`, images.innerHTML);
-        });
+        localStorage.setItem('post_header', document.querySelector('.post_header').innerHTML);
+        localStorage.setItem('post_images', document.querySelector('.post_images').innerHTML);
         alert('變更已保存！');
     });
-
 
     // 處理圖片替換和刪除
     function setupImageActions(img) {
