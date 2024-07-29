@@ -14,6 +14,17 @@ window.addEventListener('load', function () {
         alert('變更已保存！');
     });
 
+    // 讀取儲存內容
+    document.getElementById('loadButton').addEventListener('click', function () {
+        if (localStorage.getItem('post_header')) {
+            document.querySelector('.post_header').innerHTML = localStorage.getItem('post_header');
+        }
+        if (localStorage.getItem('post_images')) {
+            document.querySelector('.post_images').innerHTML = localStorage.getItem('post_images');
+        }
+        alert('已加載上次儲存的內容！');
+    });
+
     // 處理圖片替換和刪除
     function setupImageActions(img) {
         let lastTouchTime = 0;
