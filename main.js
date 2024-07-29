@@ -24,7 +24,7 @@ window.addEventListener('load', function () {
             data.post_sections.push(sectionData);
         });
 
-        fetch('https://johnworker.github.io/web_facebookpost_editing/save', {
+        fetch('https://johnworker.github.io/web_facebookpost_editing/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
