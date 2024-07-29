@@ -71,8 +71,8 @@ window.addEventListener('load', function () {
                     const newImg = document.createElement('img');
                     newImg.src = reader.result;
                     newImg.contentEditable = true;
-                    newImg.style.width = '150px'; // 固定寬度
-                    newImg.style.height = '150px'; // 固定高度
+                    newImg.style.width = '200px'; // 固定寬度
+                    newImg.style.height = '200px'; // 固定高度
 
                     // 獲取選擇的 section
                     const sectionId = document.getElementById('sectionSelector').value;
