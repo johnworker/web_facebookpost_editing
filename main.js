@@ -11,8 +11,40 @@ window.addEventListener('load', function () {
     document.getElementById('saveButton').addEventListener('click', function () {
         localStorage.setItem('post_header', document.querySelector('.post_header').innerHTML);
         localStorage.setItem('post_images', document.querySelector('.post_images').innerHTML);
+
+        // 保存到GitHub
+        saveToGitHub();
+
         alert('變更已保存！');
     });
+
+    // 保存到GitHub的函數
+    function saveToGitHub() {
+        const token = 'YOUR_GITHUB_PAT'; // 替換為您的GitHub個人訪問令牌
+        const repo = 'YOUR_GITHUB_USERNAME/REPO_NAME'; // 替換為您的GitHub倉庫信息
+        const filePath = 'index.html'; // 替換為您的文件路徑
+
+        // 獲取文件內容
+        const content = btoa(unescape(encodeURIComponent(document.documentElement.outerHTML))); // Base64編碼
+
+        fetch(`https://api.github.com/repos/${repo}/contents/${filePath}`, {
+            method: 'PUT',
+            headers: {
+                'Authorization': `token ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                message: '更新網站內容',
+                content: content,
+                sha: localStorage.getItem('fileSha') // 保存上一次的SHA值，防止衝突
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                localStorage.setItem('fileSha', data.content.sha);
+            })
+            .catch(error => console.error('Error:', error));
+    }
 
     // 處理圖片替換和刪除
     function setupImageActions(img) {
