@@ -12,7 +12,7 @@ window.addEventListener('load', function () {
         const data = {
             post_sections: []
         };
-
+    
         document.querySelectorAll('.post_section').forEach(section => {
             const sectionData = {
                 header: section.querySelector('.post_header').innerHTML,
@@ -23,31 +23,39 @@ window.addEventListener('load', function () {
             });
             data.post_sections.push(sectionData);
         });
-
-        fetch('https://johnworker.github.io/web_facebookpost_editing/', {
-            method: 'POST',
+    
+        // 將資料推送到GitHub Pages
+        fetch('https://api.github.com/repos/您的GitHub用戶名/您的倉庫名/contents/index.html', {
+            method: 'PUT',
             headers: {
+                'Authorization': 'token 您的GitHub令牌',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(data)
-        })
-            .then(response => response.json())
-            .then(data => {
-                alert('變更已保存！');
+            body: JSON.stringify({
+                message: 'Update post content',
+                content: btoa(JSON.stringify(data)), // 將內容編碼為Base64
+                sha: '您需要取得的文件SHA值'
             })
-            .catch((error) => {
-                console.error('Error saving content:', error);
-                alert('保存內容時發生錯誤。');
-            });
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert('變更已保存！');
+        })
+        .catch(error => {
+            console.error('Error saving content:', error);
+            alert('保存內容時發生錯誤。');
+        });
     }
-
+    
     // 從遠端讀取內容
     function loadRemoteContent() {
-        fetch('https://johnworker.github.io/web_facebookpost_editing/')
+        fetch('https://api.github.com/repos/您的GitHub用戶名/您的倉庫名/contents/index.html')
             .then(response => response.json())
             .then(data => {
-                if (data.post_sections) {
-                    data.post_sections.forEach((sectionData, index) => {
+                const content = atob(data.content); // 解碼Base64內容
+                const jsonData = JSON.parse(content);
+                if (jsonData.post_sections) {
+                    jsonData.post_sections.forEach((sectionData, index) => {
                         const section = document.querySelector(`#section${index + 1}`);
                         if (section) {
                             section.querySelector('.post_header').innerHTML = sectionData.header;
@@ -71,7 +79,7 @@ window.addEventListener('load', function () {
                 alert('讀取內容時發生錯誤。');
             });
     }
-
+    
     // 處理圖片替換和刪除
     function setupImageActions(img) {
         let lastTouchTime = 0;
