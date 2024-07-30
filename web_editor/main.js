@@ -9,10 +9,42 @@ window.addEventListener('load', function () {
 
     // 保存變更
     document.getElementById('saveButton').addEventListener('click', function () {
-        localStorage.setItem('post_header', document.querySelector('.post_header').innerHTML);
-        localStorage.setItem('post_images', document.querySelector('.post_images').innerHTML);
-        alert('變更已保存！');
+        const postHeader = document.querySelector('.post_header').outerHTML;
+        const postImages = document.querySelector('.post_images').outerHTML;
+    
+        const newContent = `
+        <!DOCTYPE html>
+        <html lang="zh">
+        <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>貼文編輯器</title>
+            <link rel="stylesheet" href="./style.css">
+        </head>
+        <body>
+            <h1 class="today_mark" contenteditable="true">今日記錄重要事項</h1>
+            <div class="post_section" id="section1">
+                ${postHeader}
+                ${postImages}
+            </div>
+            <script src="./main.js"></script>
+        </body>
+        </html>
+        `;
+    
+        fetch('http://your_node_server_address/save', { // 替換為你的Node.js伺服器地址
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ content: newContent })
+        })
+        .then(response => response.text())
+        .then(data => alert(data))
+        .catch(error => console.error('Error:', error));
     });
+    
+    
     
     // 處理圖片替換和刪除
     function setupImageActions(img) {
