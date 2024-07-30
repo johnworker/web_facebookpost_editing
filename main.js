@@ -25,7 +25,7 @@ window.addEventListener('load', function () {
         });
     
         // 將資料推送到GitHub Pages
-        fetch('https://api.github.com/repos/您的GitHub用戶名/您的倉庫名/contents/index.html', {
+        fetch('https://api.github.com/repos/johnworker/web_facebookpost_editing/index.html', {
             method: 'PUT',
             headers: {
                 'Authorization': 'token 您的GitHub令牌',
@@ -49,7 +49,7 @@ window.addEventListener('load', function () {
     
     // 從遠端讀取內容
     function loadRemoteContent() {
-        fetch('https://api.github.com/repos/您的GitHub用戶名/您的倉庫名/contents/index.html')
+        fetch('https://api.github.com/repos/johnworker/web_facebookpost_editing/index.html')
             .then(response => response.json())
             .then(data => {
                 const content = atob(data.content); // 解碼Base64內容
