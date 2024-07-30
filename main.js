@@ -75,14 +75,14 @@ window.addEventListener('load', function () {
                     const sectionId = document.getElementById('sectionSelector').value;
                     const targetSection = document.querySelector(`#${sectionId} .post_images .row:last-child`);
 
-                    if (targetSection) {
-                        targetSection.appendChild(newImg);
-                    } else {
-                        const newRow = document.createElement('div');
-                        newRow.classList.add('row');
-                        newRow.appendChild(newImg);
-                        document.querySelector(`#${sectionId} .post_images`).appendChild(newRow);
-                    }
+                    if (targetSection && targetSection.children.length < 2) {
+                    targetSection.appendChild(newImg); // 添加到當前行
+                } else {
+                    const newRow = document.createElement('div');
+                    newRow.classList.add('row');
+                    newRow.appendChild(newImg); // 新建行並添加圖片
+                    document.querySelector(`#${sectionId} .post_images`).appendChild(newRow);
+                }
 
                     setupImageActions(newImg);
                     setupDragAndDrop(newImg);
