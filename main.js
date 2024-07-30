@@ -1,84 +1,18 @@
 window.addEventListener('load', function () {
-    // 自動加載已保存的內容
-    loadRemoteContent();
+    // 加載已保存的內容
+    if (localStorage.getItem('post_header')) {
+        document.querySelector('.post_header').innerHTML = localStorage.getItem('post_header');
+    }
+    if (localStorage.getItem('post_images')) {
+        document.querySelector('.post_images').innerHTML = localStorage.getItem('post_images');
+    }
 
     // 保存變更
     document.getElementById('saveButton').addEventListener('click', function () {
-        saveRemoteContent();
+        localStorage.setItem('post_header', document.querySelector('.post_header').innerHTML);
+        localStorage.setItem('post_images', document.querySelector('.post_images').innerHTML);
+        alert('變更已保存！');
     });
-
-    // 保存到遠端伺服器
-    function saveRemoteContent() {
-        const data = {
-            post_sections: []
-        };
-    
-        document.querySelectorAll('.post_section').forEach(section => {
-            const sectionData = {
-                header: section.querySelector('.post_header').innerHTML,
-                images: []
-            };
-            section.querySelectorAll('.post_images img').forEach(img => {
-                sectionData.images.push(img.src);
-            });
-            data.post_sections.push(sectionData);
-        });
-    
-        // 將資料推送到GitHub Pages
-        fetch('https://api.github.com/repos/johnworker/web_facebookpost_editing/index.html', {
-            method: 'PUT',
-            headers: {
-                'Authorization': 'token 您的GitHub令牌',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                message: 'Update post content',
-                content: btoa(JSON.stringify(data)), // 將內容編碼為Base64
-                sha: '您需要取得的文件SHA值'
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert('變更已保存！');
-        })
-        .catch(error => {
-            console.error('Error saving content:', error);
-            alert('保存內容時發生錯誤。');
-        });
-    }
-    
-    // 從遠端讀取內容
-    function loadRemoteContent() {
-        fetch('https://api.github.com/repos/johnworker/web_facebookpost_editing/index.html')
-            .then(response => response.json())
-            .then(data => {
-                const content = atob(data.content); // 解碼Base64內容
-                const jsonData = JSON.parse(content);
-                if (jsonData.post_sections) {
-                    jsonData.post_sections.forEach((sectionData, index) => {
-                        const section = document.querySelector(`#section${index + 1}`);
-                        if (section) {
-                            section.querySelector('.post_header').innerHTML = sectionData.header;
-                            const imagesContainer = section.querySelector('.post_images');
-                            imagesContainer.innerHTML = ''; // 清空現有圖片
-                            sectionData.images.forEach(src => {
-                                const img = document.createElement('img');
-                                img.src = src;
-                                img.setAttribute('contenteditable', 'true');
-                                imagesContainer.appendChild(img);
-                                setupImageActions(img);
-                                setupDragAndDrop(img);
-                            });
-                        }
-                    });
-                }
-                alert('已加載上次儲存的內容！');
-            })
-            .catch(error => {
-                console.error('Error loading remote content:', error);
-                alert('讀取內容時發生錯誤。');
-            });
-    }
     
     // 處理圖片替換和刪除
     function setupImageActions(img) {
